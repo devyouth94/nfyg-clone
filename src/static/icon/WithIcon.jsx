@@ -1,7 +1,7 @@
 import React from "react";
 
 export const WithIcon = ({ color }) => (
-  <svg width="76" height="27" viewBox="0 0 76 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="55" height="21" viewBox="0 0 80 27" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M22.8144 8.64L20.0944 18.398L15.5044 8.708H13.8044L9.45236 18.296L6.69836 8.64H0.0683594L6.05236 27H11.1524L14.7224 18.806L18.3264 27H23.4264L29.2744 8.64H22.8144Z"
       fill={color}
