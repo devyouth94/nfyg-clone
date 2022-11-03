@@ -1,7 +1,9 @@
+import { useQueryContext } from "contexts/QueryContext";
 import React, { useState } from "react";
 import styled from "styled-components";
 
 const Dropdown = ({ arr, name }) => {
+  const { handleGetQuery, handleDelQuery } = useQueryContext();
   const [selectedItem, setSelectedItem] = useState([]);
   const [newArr, setNewArr] = useState(arr);
   const [isDrop, setIsDrop] = useState(false);
@@ -11,12 +13,14 @@ const Dropdown = ({ arr, name }) => {
   };
 
   const handleClickItem = (item) => {
+    handleGetQuery(name, item);
     setSelectedItem((prev) => [...prev, item]);
     setNewArr((prev) => prev.filter((value) => value !== item));
     setIsDrop((prev) => !prev);
   };
 
   const handleCancelItem = (item) => {
+    handleDelQuery(name, item);
     setSelectedItem((prev) => prev.filter((value) => value !== item));
     setNewArr(arr.filter((value) => value === item || !selectedItem.includes(value)));
     setIsDrop(true);
