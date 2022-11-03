@@ -4,20 +4,28 @@ import instance from "apis/instance";
 import MeetupCard from "components/MeetupCard";
 
 import styled from "styled-components";
+import { useCallback } from "react";
 
 const ProceedingList = () => {
   const [proceedingList, setProceedingList] = useState([]);
 
-  const handleGetList = async () => {
-    const { data } = await instance.get(
-      "/meetups?type=1&season=7&order=salon_category_asc&upcoming=false&limit=20&offset=0",
-    );
+  const [params, setParams] = useState({
+    type: 1,
+    season: 7,
+    order: "salon_category_asc",
+    upcoming: false,
+    limit: 20,
+    offset: 0,
+  });
+
+  const handleGetList = useCallback(async () => {
+    const { data } = await instance.get("/meetups", { params });
     setProceedingList((prev) => [...prev, ...data.data.meetups]);
-  };
+  }, [params]);
 
   useEffect(() => {
     handleGetList();
-  }, []);
+  }, [handleGetList]);
 
   return (
     <SListContainer>
@@ -54,9 +62,9 @@ const SListContainer = styled.div`
 `;
 
 const SCardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
   row-gap: 2.1rem;
   column-gap: 1.2rem;
 

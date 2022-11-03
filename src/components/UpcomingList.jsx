@@ -1,41 +1,53 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import instance from "apis/instance";
 
 import MeetupCard from "components/MeetupCard";
+import Dropdown from "components/Dropdown";
 import Imoji from "components/Card/Imoji";
 
+import useCategory from "hooks/useCategory";
 import { categoryArr } from "utils/arr";
 
+import checked from "static/icon/ic_check_on.svg";
+import unchecked from "static/icon/ic_check_sm_off.svg";
+
 import styled from "styled-components";
+import { dayArr, regionArr } from "utils/arr";
 
 const UpcomingList = () => {
+  const { queryCategory, selectedCategory, handleCategoryClick } = useCategory();
   const [upcomingList, setUpcomingList] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState([]);
 
-  const handleGetList = async () => {
-    const { data } = await instance.get(
-      "/meetups?type=1&season=7&order=salon_category_asc&upcoming=true&limit=20&offset=0",
-    );
-    setUpcomingList((prev) => [...prev, ...data.data.meetups]);
-  };
+  const [params, setParams] = useState({
+    type: 1,
+    season: 7,
+    order: "salon_category_asc",
+    upcoming: true,
+    limit: 20,
+    offset: 0,
+    salonCategory: null,
+    soldOut: null,
+    weekOfDay: null,
+    region: null,
+  });
+
+  const handleGetList = useCallback(async () => {
+    const { data } = await instance.get("/meetups", {
+      params: { ...params, salonCategory: queryCategory },
+    });
+    setUpcomingList(data.data.meetups);
+  }, [params, queryCategory]);
 
   useEffect(() => {
     handleGetList();
-  }, []);
+  }, [handleGetList]);
 
-  const handleCategoryClick = (category) => {
-    if (category === "전체" && !selectedCategory.length) return;
-
-    if (category === "전체") {
-      setSelectedCategory([]);
-      return;
-    }
-
-    if (selectedCategory.includes(category)) {
-      setSelectedCategory((prev) => prev.filter((item) => item !== category));
+  const handleClickSoldOut = () => {
+    if (params.soldOut === null) {
+      setParams((prev) => ({ ...prev, soldOut: false }));
     } else {
-      setSelectedCategory((prev) => [...prev, category]);
+      setParams((prev) => ({ ...prev, soldOut: null }));
     }
   };
 
@@ -55,6 +67,20 @@ const UpcomingList = () => {
         ))}
       </SCategoryContainer>
 
+      <SSoldoutChecked>
+        <img
+          src={params.soldOut === false ? checked : unchecked}
+          alt="check"
+          onClick={handleClickSoldOut}
+        />
+        <span onClick={handleClickSoldOut}>마감 모임 제외</span>
+      </SSoldoutChecked>
+
+      <SDropdownContainer>
+        <Dropdown name="지역" arr={regionArr} />
+        <Dropdown name="요일" arr={dayArr} />
+      </SDropdownContainer>
+
       <SCardContainer>
         {upcomingList?.map((item) => (
           <MeetupCard key={item.id} item={item} />
@@ -64,25 +90,25 @@ const UpcomingList = () => {
   );
 };
 
-const SUpcomingListContainer = styled.div``;
-
-const SCardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-
-  row-gap: 2.1rem;
-  column-gap: 1.2rem;
-
-  padding: 2rem;
+const SUpcomingListContainer = styled.div`
+  padding-top: 2rem;
 `;
 
 const SCategoryContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
   gap: 0.8rem;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
 
   padding: 2rem;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  > div {
+    flex-shrink: 0;
+  }
 `;
 
 const SCategoryBox = styled.div`
@@ -101,6 +127,34 @@ const SCategoryBox = styled.div`
 
   font-size: 1.2rem;
   color: ${(props) => (props.include ? "#fff" : "#000")};
+`;
+
+const SSoldoutChecked = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding: 0 2rem;
+
+  font-size: 1.2rem;
+`;
+
+const SDropdownContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  padding: 1rem 2rem;
+`;
+
+const SCardContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  row-gap: 2.1rem;
+  column-gap: 1.2rem;
+
+  padding: 2rem;
 `;
 
 export default UpcomingList;
