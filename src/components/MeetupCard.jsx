@@ -8,6 +8,7 @@ const MeetupCard = ({ item }) => {
   return (
     <SCard>
       <CardImage
+        item={item}
         category={item.tags.salonCategory[0]}
         isWith={item.additionalInformation.memberLed}
         host={item.host}
@@ -30,8 +31,6 @@ const MeetupCard = ({ item }) => {
 };
 
 const SCard = styled.div`
-  flex: 1 1 40%;
-
   border: 1px solid #dadce0;
   border-radius: 1rem;
 `;
@@ -40,7 +39,7 @@ const SInfo = styled.div`
   display: grid;
   grid-template-rows: 2.5rem auto 1.6rem;
 
-  min-height: 14rem;
+  min-height: 13rem;
   padding: 1.5rem;
 
   > div:nth-child(1) {

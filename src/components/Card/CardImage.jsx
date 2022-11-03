@@ -1,39 +1,41 @@
 import React from "react";
 import { WithIcon } from "static/icon/WithIcon";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { categoryArr } from "utils/arr";
 import TextBackground from "./TextBackground";
 
-const CardImage = ({ category, host, isWith, thumbnail }) => {
-  const [item] = categoryArr.filter((item) => item.name === category);
+const CardImage = ({ item }) => {
+  const [category] = categoryArr.filter((value) => value.name === item.tags.salonCategory[0]);
 
   return (
-    <SBackground color={item.lightColor}>
-      {isWith && (
-        <>
-          <SThumbnailImage color={item.color}>
-            <img src={thumbnail} alt="thumbnailImage" />
-          </SThumbnailImage>
-          <TextBackground category={category} />
-        </>
-      )}
+    <>
+      <SBackground color={category.lightColor} isFull={item.attendeeCount === item.maxCapacity}>
+        {item.additionalInformation.memberLed && (
+          <>
+            <SThumbnailImage color={category.color}>
+              <img src={item.thumbnailUrl} alt="thumbnailImage" />
+            </SThumbnailImage>
+            <TextBackground category={category.name} />
+          </>
+        )}
 
-      {!isWith && (
-        <>
-          <SWithIcon>
-            <WithIcon color={item.color} />
-          </SWithIcon>
-          <SProfileImage color={item.color}>
-            <img src={host.profileImageUrl} alt="hostImage" />
-          </SProfileImage>
-          <SNameTag color={item.color}>
-            <span>{host.name}</span>
-            <span>|</span>
-            <span>{host.title}</span>
-          </SNameTag>
-        </>
-      )}
-    </SBackground>
+        {!item.additionalInformation.memberLed && (
+          <>
+            <SWithIcon>
+              <WithIcon color={category.color} />
+            </SWithIcon>
+            <SProfileImage color={category.color}>
+              <img src={item.host.profileImageUrl} alt="hostImage" />
+            </SProfileImage>
+            <SNameTag color={category.color}>
+              <span>{item.host.name}</span>
+              <span>|</span>
+              <span>{item.host.title}</span>
+            </SNameTag>
+          </>
+        )}
+      </SBackground>
+    </>
   );
 };
 
@@ -41,10 +43,16 @@ const SBackground = styled.div`
   position: relative;
 
   width: 100%;
-  height: 15.3rem;
+  height: 13rem;
   background-color: ${(props) => props.color};
 
   border-radius: 1rem 1rem 0 0;
+
+  ${(props) =>
+    props.isFull &&
+    css`
+      filter: brightness(65%);
+    `}
 `;
 
 const SThumbnailImage = styled.div`
@@ -66,7 +74,7 @@ const SThumbnailImage = styled.div`
 
 const SWithIcon = styled.div`
   position: absolute;
-  top: 5.5rem;
+  top: 4.5rem;
   left: 1rem;
 
   z-index: 9;
@@ -74,7 +82,7 @@ const SWithIcon = styled.div`
 
 const SProfileImage = styled.div`
   position: absolute;
-  top: 2.5rem;
+  top: 10%;
   left: 50%;
   transform: translateX(-50%);
 
