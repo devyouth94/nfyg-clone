@@ -8,6 +8,7 @@ import { useCallback } from "react";
 
 const ProceedingList = () => {
   const [proceedingList, setProceedingList] = useState([]);
+  const [isNext, setIsNext] = useState(null);
 
   const [params, setParams] = useState({
     type: 1,
@@ -18,10 +19,23 @@ const ProceedingList = () => {
     offset: 0,
   });
 
+  const handleGetMore = async () => {
+    const { data } = await instance.get("/meetups", {
+      params: {
+        ...params,
+        offset: params.offset + params.limit,
+      },
+    });
+    setProceedingList((prev) => [...prev, ...data.data.meetups]);
+    setParams((prev) => ({ ...prev, offset: params.offset + params.limit }));
+    setIsNext(data.data.pagination.nextPage);
+  };
+
   const handleGetList = useCallback(async () => {
     const { data } = await instance.get("/meetups", { params });
-    setProceedingList((prev) => [...prev, ...data.data.meetups]);
-  }, [params]);
+    setProceedingList(data.data.meetups);
+    setIsNext(data.data.pagination.nextPage);
+  }, []);
 
   useEffect(() => {
     handleGetList();
@@ -40,6 +54,7 @@ const ProceedingList = () => {
         {proceedingList?.map((item) => (
           <MeetupCard key={item.id} item={item} />
         ))}
+        {isNext && <span onClick={handleGetMore}>더보기</span>}
       </SCardContainer>
     </SListContainer>
   );

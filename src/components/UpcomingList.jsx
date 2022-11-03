@@ -4,20 +4,19 @@ import instance from "apis/instance";
 
 import MeetupCard from "components/MeetupCard";
 import Dropdown from "components/Dropdown";
-import Imoji from "components/Card/Imoji";
-
-import useCategory from "hooks/useCategory";
-import { categoryArr } from "utils/arr";
+import Category from "./Category";
 
 import checked from "static/icon/ic_check_on.svg";
 import unchecked from "static/icon/ic_check_sm_off.svg";
 
 import styled from "styled-components";
-import { dayArr, regionArr } from "utils/arr";
+import { dayArr, regionArr, categoryArr } from "utils/arr";
+import { useQueryContext } from "contexts/QueryContext";
 
 const UpcomingList = () => {
-  const { queryCategory, selectedCategory, handleCategoryClick } = useCategory();
+  const { query } = useQueryContext();
   const [upcomingList, setUpcomingList] = useState([]);
+  const [isNext, setIsNext] = useState(null);
 
   const [params, setParams] = useState({
     type: 1,
@@ -26,18 +25,36 @@ const UpcomingList = () => {
     upcoming: true,
     limit: 20,
     offset: 0,
-    salonCategory: null,
     soldOut: null,
-    weekOfDay: null,
-    region: null,
   });
+
+  const handleGetMore = async () => {
+    const { data } = await instance.get("/meetups", {
+      params: {
+        ...params,
+        salonCategory: query.category,
+        dayOfWeek: query.day,
+        region: query.region,
+        offset: params.offset + params.limit,
+      },
+    });
+    setUpcomingList((prev) => [...prev, ...data.data.meetups]);
+    setParams((prev) => ({ ...prev, offset: params.offset + params.limit }));
+    setIsNext(data.data.pagination.nextPage);
+  };
 
   const handleGetList = useCallback(async () => {
     const { data } = await instance.get("/meetups", {
-      params: { ...params, salonCategory: queryCategory },
+      params: {
+        ...params,
+        salonCategory: query.category,
+        dayOfWeek: query.day,
+        region: query.region,
+      },
     });
     setUpcomingList(data.data.meetups);
-  }, [params, queryCategory]);
+    setIsNext(data.data.pagination.nextPage);
+  }, [query.category, query.day, query.region]);
 
   useEffect(() => {
     handleGetList();
@@ -55,15 +72,7 @@ const UpcomingList = () => {
     <SUpcomingListContainer>
       <SCategoryContainer>
         {categoryArr.map((category) => (
-          <SCategoryBox
-            key={category.name}
-            onClick={() => handleCategoryClick(category.name)}
-            include={selectedCategory.includes(category.name)}
-            color={category.color}
-          >
-            <Imoji category={category.name} include={selectedCategory.includes(category.name)} />
-            {category.name}
-          </SCategoryBox>
+          <Category key={category.name} category={category} />
         ))}
       </SCategoryContainer>
 
@@ -85,6 +94,8 @@ const UpcomingList = () => {
         {upcomingList?.map((item) => (
           <MeetupCard key={item.id} item={item} />
         ))}
+
+        {isNext && <span onClick={handleGetMore}>더 보기</span>}
       </SCardContainer>
     </SUpcomingListContainer>
   );
@@ -109,24 +120,6 @@ const SCategoryContainer = styled.div`
   > div {
     flex-shrink: 0;
   }
-`;
-
-const SCategoryBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.4rem;
-
-  width: fit-content;
-  height: 4rem;
-  padding: 1rem;
-  background-color: ${(props) => (props.include ? props.color : "#fff")};
-
-  border: 1px solid #dadce0;
-  border-radius: 1rem;
-
-  font-size: 1.2rem;
-  color: ${(props) => (props.include ? "#fff" : "#000")};
 `;
 
 const SSoldoutChecked = styled.div`
