@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const usePagination = (limitItem, maxPage) => {
+const usePagination = (limitItem, maxPage = 99) => {
   const [page, setPage] = useState(1);
   const limit = limitItem;
   const offset = (page - 1) * limit;
