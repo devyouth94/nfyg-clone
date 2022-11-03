@@ -25,48 +25,61 @@ const Introduce = () => {
 
   return (
     <SIntroduceContainer>
-      <div>
+      <SItemTitle>
         <h2>참여 중인 멤버들의 한 줄 소개</h2>
         <img onClick={handleRefresh} src={shuffle} alt="shuffle" />
-      </div>
-      <div>
+      </SItemTitle>
+      <SItemContainer>
         {introduce.slice(offset, offset + limit).map((item, idx) => (
           <SIntroduceItem key={idx}>
             <div>
-              <div>
+              <span>
                 <Imoji category={item.salonCategory[0]} />
                 {item.salonCategory[0]}
-              </div>
-              <div>{displayTime(item.createdAt)}</div>
+              </span>
+              <span>{displayTime(item.createdAt)}</span>
             </div>
             <div>{item.introduction}</div>
           </SIntroduceItem>
         ))}
-      </div>
+      </SItemContainer>
     </SIntroduceContainer>
   );
 };
 
 const SIntroduceContainer = styled.div`
   padding: 3rem 2rem 0 2rem;
+`;
 
-  > div:nth-child(1) {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+const SItemTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 
-    h2 {
-      line-height: 2.4rem;
-      font-weight: 700;
-    }
-
-    img {
-      width: 1.8rem;
-    }
+  h2 {
+    line-height: 2.4rem;
+    font-weight: 700;
   }
 
-  > div:nth-child(2) {
-    margin-top: 1rem;
+  img {
+    width: 1.8rem;
+  }
+`;
+
+const SItemContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+
+  margin-top: 1rem;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  > div {
+    flex-shrink: 0;
   }
 `;
 
@@ -86,7 +99,7 @@ const SIntroduceItem = styled.div`
     font-size: 1.1rem;
     color: #666;
 
-    div {
+    span {
       display: flex;
       align-items: center;
       gap: 0.3rem;
