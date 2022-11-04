@@ -27,6 +27,7 @@ export const __getListMore = createAsyncThunk("/getListMore", async (params, thu
 const initialState = {
   data: [],
   isNext: null,
+  isLoading: null,
   error: null,
 };
 
@@ -42,15 +43,20 @@ export const upcomingListSlice = createSlice({
       state.error = action.payload;
     },
 
+    [__getListMore.pending]: (state) => {
+      state.isLoading = true;
+    },
     [__getListMore.fulfilled]: (state, action) => {
       const newArr = action.payload.meetups.filter(
         (value) => !state.data.some((item) => item.id === value.id),
       );
       state.data = [...state.data, ...newArr];
       state.isNext = action.payload.pagination.nextPage;
+      state.isLoading = false;
     },
     [__getListMore.rejected]: (state, action) => {
       state.error = action.payload;
+      state.isLoading = false;
     },
   },
 });

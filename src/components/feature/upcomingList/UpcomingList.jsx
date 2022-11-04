@@ -7,6 +7,7 @@ import { __getList, __getListMore } from "app/slices/upcomingListSlice";
 import MeetupCard from "components/common/meetupCard/MeetupCard";
 import Dropdown from "components/feature/upcomingList/Dropdown";
 import Category from "components/feature/upcomingList/Category";
+import HelpText from "components/common/HelpText";
 
 import usePagination from "hooks/usePagination";
 import { getString } from "utils/getString";
@@ -19,7 +20,7 @@ import styled from "styled-components";
 const UpcomingList = () => {
   const dispatch = useDispatch();
   const { offset, handleRefresh, handleReset } = usePagination(20, 2);
-  const { data: upcomingList, isNext } = useSelector((state) => state.upcomingList);
+  const { data: upcomingList, isNext, isLoading } = useSelector((state) => state.upcomingList);
   const {
     category: categoryData,
     day: dayData,
@@ -84,14 +85,14 @@ const UpcomingList = () => {
         ))}
       </S.CardContainer>
 
-      {isNext && <span onClick={handleGetMore}>더 보기</span>}
+      {isNext && <HelpText onClick={handleGetMore} isLoading={isLoading} />}
     </S.UpcomingListContainer>
   );
 };
 
 const S = {
   UpcomingListContainer: styled.div`
-    padding-top: 2rem;
+    padding: 2rem;
   `,
 
   CategoryContainer: styled.div`
@@ -100,7 +101,7 @@ const S = {
     flex-wrap: nowrap;
     overflow-x: scroll;
 
-    padding: 2rem;
+    padding: 2rem 0;
 
     &::-webkit-scrollbar {
       display: none;
@@ -116,8 +117,6 @@ const S = {
     align-items: center;
     justify-content: flex-end;
 
-    padding: 0 2rem;
-
     font-size: 1.2rem;
 
     img,
@@ -131,7 +130,7 @@ const S = {
     flex-direction: column;
     gap: 1rem;
 
-    padding: 1rem 2rem;
+    padding: 1rem 0;
   `,
 
   CardContainer: styled.div`
@@ -141,7 +140,7 @@ const S = {
     row-gap: 2.1rem;
     column-gap: 1.2rem;
 
-    padding: 2rem;
+    padding: 2rem 0;
   `,
 };
 

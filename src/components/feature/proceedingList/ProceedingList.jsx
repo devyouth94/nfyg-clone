@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import instance from "app/instance";
+import HelpText from "components/common/HelpText";
 import MeetupCard from "components/common/meetupCard/MeetupCard";
 import usePagination from "hooks/usePagination";
 import { basicParams } from "utils/params";
@@ -7,8 +8,10 @@ import styled from "styled-components";
 
 const ProceedingList = () => {
   const { offset, handleRefresh } = usePagination(20);
+
   const [proceedingList, setProceedingList] = useState([]);
   const [isNext, setIsNext] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGetList = useCallback(async () => {
     const { data } = await instance.get("/v2/nfyg/meetups", {
@@ -20,6 +23,7 @@ const ProceedingList = () => {
       ...data.data.meetups.filter((value) => !prev.some((item) => item.id === value.id)),
     ]);
     setIsNext(data.data.pagination.nextPage);
+    setIsLoading(false);
   }, [offset]);
 
   useEffect(() => {
@@ -28,6 +32,7 @@ const ProceedingList = () => {
 
   const handleGetMore = () => {
     handleRefresh();
+    setIsLoading(true);
   };
 
   return (
@@ -45,7 +50,7 @@ const ProceedingList = () => {
         ))}
       </S.CardContainer>
 
-      {isNext && <span onClick={handleGetMore}>더보기</span>}
+      {isNext && <HelpText onClick={handleGetMore} isLoading={isLoading} />}
     </S.ListContainer>
   );
 };
