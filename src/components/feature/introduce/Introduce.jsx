@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
-import instance from "apis/instance";
+import instance from "app/instance";
 import IntroduceCard from "components/feature/introduce/IntroduceCard";
 import usePagination from "hooks/usePagination";
 import shuffle from "static/icon/shuffle_gray.svg";
 import styled from "styled-components";
 
 const Introduce = () => {
+  const { limit, offset, handleRefresh } = usePagination(4, 1, 9);
   const [introduce, setIntroduce] = useState([]);
-  const { limit, offset, handleRefresh } = usePagination(4, 9);
 
   const handleGetIntroduce = async () => {
-    const { data } = await instance.get("/introductions");
-    setIntroduce((prev) => [...prev, ...data.data.introductions]);
+    try {
+      const { data } = await instance.get("/v2/nfyg/introductions");
+      setIntroduce((prev) => [...prev, ...data.data.introductions]);
+    } catch (error) {
+      throw new Error(error);
+    }
   };
 
   useEffect(() => {
