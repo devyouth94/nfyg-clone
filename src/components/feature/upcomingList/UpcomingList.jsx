@@ -31,7 +31,6 @@ const UpcomingList = () => {
     handleReset();
     dispatch(
       __getList({
-        offset: 0,
         salonCategory: getString(categoryData),
         dayOfWeek: getString(dayData),
         region: getString(regionData),
