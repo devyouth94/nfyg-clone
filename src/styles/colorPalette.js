@@ -23,6 +23,11 @@ const COLOR_BRIGHT = {
 const MAIN_COLOR = {
   white: "#fff",
   black: "#000",
+  gray1: "#dadce0",
+  gray2: "#aaa",
+  gray3: "#666",
+
+  hover: "aliceblue",
 };
 
 export { COLOR, COLOR_BRIGHT, MAIN_COLOR };

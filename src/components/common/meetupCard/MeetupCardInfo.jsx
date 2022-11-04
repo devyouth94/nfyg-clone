@@ -1,6 +1,7 @@
 import React from "react";
 import Imoji from "components/common/Imoji";
 import { convertDate } from "utils/date";
+import { MAIN_COLOR } from "styles/colorPalette";
 import styled from "styled-components";
 
 const MeetupCardInfo = ({ item }) => {
@@ -9,10 +10,8 @@ const MeetupCardInfo = ({ item }) => {
   return (
     <S.InfoContainer>
       <div>
-        <span>
-          <Imoji category={category} />
-        </span>
-        <span>{category}</span>
+        <Imoji category={category} />
+        {category}
       </div>
       <div>{item.title}</div>
       <div>
@@ -25,7 +24,8 @@ const MeetupCardInfo = ({ item }) => {
 const S = {
   InfoContainer: styled.div`
     display: grid;
-    grid-template-rows: 2.5rem auto 1.6rem;
+    grid-template-rows: 2rem auto 1.2rem;
+    row-gap: 0.5rem;
 
     min-height: 13rem;
     padding: 1.5rem;
@@ -36,22 +36,19 @@ const S = {
       gap: 0.3rem;
 
       font-size: 1.1rem;
-      line-height: 1.6rem;
-      color: #666;
+      color: ${MAIN_COLOR.gray3};
     }
 
     > div:nth-child(2) {
-      margin-bottom: 0.5rem;
-
       font-size: 1.2rem;
       font-weight: 700;
-      line-height: 1.8rem;
+      line-height: 1.6rem;
     }
 
     > div:nth-child(3) {
       font-size: 1.1rem;
-      line-height: 1.6rem;
-      color: #666;
+      line-height: 1.2rem;
+      color: ${MAIN_COLOR.gray3};
     }
   `,
 };

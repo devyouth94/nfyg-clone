@@ -1,6 +1,7 @@
 import React from "react";
 import Imoji from "components/common/Imoji";
 import { displayTime } from "utils/date";
+import { MAIN_COLOR } from "styles/colorPalette";
 import styled from "styled-components";
 
 const IntroduceCard = ({ item }) => {
@@ -25,7 +26,7 @@ const S = {
     height: 14rem;
     padding: 1.5rem;
 
-    border: 1px solid #dadce0;
+    border: 1px solid ${MAIN_COLOR.gray1};
     border-radius: 1rem;
 
     > div:nth-child(1) {
@@ -34,7 +35,7 @@ const S = {
       align-items: center;
 
       font-size: 1.1rem;
-      color: #666;
+      color: ${MAIN_COLOR.gray3};
 
       span {
         display: flex;

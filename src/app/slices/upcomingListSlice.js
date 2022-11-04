@@ -13,7 +13,7 @@ export const __getList = createAsyncThunk("/getList", async (params, thunkAPI) =
   }
 });
 
-export const __getListMore = createAsyncThunk("__getListMore", async (params, thunkAPI) => {
+export const __getListMore = createAsyncThunk("/getListMore", async (params, thunkAPI) => {
   try {
     const { data } = await instance.get("/v2/nfyg/meetups", {
       params: { ...basicParams, ...params },
@@ -33,7 +33,6 @@ const initialState = {
 export const upcomingListSlice = createSlice({
   name: "select",
   initialState,
-  reducers: {},
   extraReducers: {
     [__getList.fulfilled]: (state, action) => {
       state.data = action.payload.meetups;
@@ -55,7 +54,5 @@ export const upcomingListSlice = createSlice({
     },
   },
 });
-
-// export const {} = upcomingListSlice.actions;
 
 export default upcomingListSlice.reducer;

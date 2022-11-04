@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { getSelect, delSelect } from "app/slices/selectSlice";
+import { MAIN_COLOR } from "styles/colorPalette";
 import styled from "styled-components";
 
-const Dropdown = ({ arr, selectedData, name }) => {
+const Dropdown = ({ arr, name, selectedData }) => {
   const dispatch = useDispatch();
-
   const [newArr, setNewArr] = useState(arr);
   const [isDrop, setIsDrop] = useState(false);
 
@@ -62,24 +62,26 @@ const S = {
   `,
 
   Input: styled.div`
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 3.6rem;
     align-items: center;
-    justify-content: space-between;
 
     width: 100%;
     min-height: 3.6rem;
     padding: 0.7rem 0 0.7rem 1rem;
 
-    border: 1px solid #dadce0;
+    border: 1px solid ${MAIN_COLOR.gray1};
     border-radius: 1rem;
 
+    cursor: pointer;
+
     &:hover {
-      border: 1px solid #aaa;
+      border: 1px solid ${MAIN_COLOR.gray2};
     }
 
     span {
       font-size: 1.2rem;
-      color: #aaa;
+      color: ${MAIN_COLOR.gray2};
     }
 
     > span:nth-child(2) {
@@ -87,9 +89,8 @@ const S = {
       justify-content: center;
       align-items: center;
 
-      width: 3.6rem;
       height: 100%;
-      border-left: 1px solid #dadce0;
+      border-left: 1px solid ${MAIN_COLOR.gray1};
     }
   `,
 
@@ -110,14 +111,16 @@ const S = {
     width: 100%;
     max-height: 30rem;
     padding: 0.5rem 0;
-    background-color: #fff;
+    background-color: ${MAIN_COLOR.white};
 
-    border: 1px solid #dadce0;
+    border: 1px solid ${MAIN_COLOR.gray1};
     border-radius: 0.5rem;
 
     overflow-y: scroll;
 
     z-index: 99;
+
+    cursor: pointer;
 
     li {
       display: flex;
@@ -129,7 +132,7 @@ const S = {
       font-size: 1.3rem;
 
       &:hover {
-        background-color: aliceblue;
+        background-color: ${MAIN_COLOR.hover};
       }
     }
   `,

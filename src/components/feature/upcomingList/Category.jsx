@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { getSelect, delSelect, resetSelect } from "app/slices/selectSlice";
 import Imoji from "components/common/Imoji";
+import { MAIN_COLOR } from "styles/colorPalette";
 import styled from "styled-components";
 
 const Category = ({ category, selectedData }) => {
@@ -24,12 +25,18 @@ const Category = ({ category, selectedData }) => {
 
   return (
     <S.CategoryCard
-      key={category.name}
       onClick={() => handleCategoryClick(category.name)}
-      include={selectedData.includes(category.name)}
+      include={
+        selectedData.includes(category.name) || (category.name === "전체" && !selectedData.length)
+      }
       color={category.color}
     >
-      <Imoji category={category.name} include={selectedData.includes(category.name)} />
+      <Imoji
+        category={category.name}
+        include={
+          selectedData.includes(category.name) || (category.name === "전체" && !selectedData.length)
+        }
+      />
       {category.name}
     </S.CategoryCard>
   );
@@ -45,13 +52,15 @@ const S = {
     width: fit-content;
     height: 4rem;
     padding: 1rem;
-    background-color: ${(props) => (props.include ? props.color : "#fff")};
+    background-color: ${(props) => (props.include ? props.color : MAIN_COLOR.white)};
 
     border: 1px solid #dadce0;
     border-radius: 1rem;
 
     font-size: 1.2rem;
-    color: ${(props) => (props.include ? "#fff" : "#000")};
+    color: ${(props) => (props.include ? MAIN_COLOR.white : MAIN_COLOR.black)};
+
+    cursor: pointer;
   `,
 };
 

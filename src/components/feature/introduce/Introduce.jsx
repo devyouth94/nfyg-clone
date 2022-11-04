@@ -55,6 +55,7 @@ const S = {
 
     img {
       width: 1.8rem;
+      cursor: pointer;
     }
   `,
 

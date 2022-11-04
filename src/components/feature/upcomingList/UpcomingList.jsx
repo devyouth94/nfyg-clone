@@ -1,31 +1,31 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import { isSoldOut } from "app/slices/selectSlice";
 import { __getList, __getListMore } from "app/slices/upcomingListSlice";
 
 import MeetupCard from "components/common/meetupCard/MeetupCard";
 import Dropdown from "components/feature/upcomingList/Dropdown";
 import Category from "components/feature/upcomingList/Category";
 
-import checked from "static/icon/ic_check_on.svg";
-import unchecked from "static/icon/ic_check_sm_off.svg";
+import usePagination from "hooks/usePagination";
 import { getString } from "utils/getString";
 import { dayArr, regionArr, categoryArr } from "utils/arr";
 
+import checked from "static/icon/ic_check_on.svg";
+import unchecked from "static/icon/ic_check_sm_off.svg";
 import styled from "styled-components";
-import { isSoldOut } from "app/slices/selectSlice";
-import usePagination from "hooks/usePagination";
 
 const UpcomingList = () => {
   const dispatch = useDispatch();
   const { offset, handleRefresh, handleReset } = usePagination(20, 2);
-
+  const { data: upcomingList, isNext } = useSelector((state) => state.upcomingList);
   const {
     category: categoryData,
     day: dayData,
     region: regionData,
     soldOut,
   } = useSelector((state) => state.select);
-  const { data: upcomingList, isNext } = useSelector((state) => state.upcomingList);
 
   useEffect(() => {
     handleReset();
@@ -37,7 +37,7 @@ const UpcomingList = () => {
         soldOut,
       }),
     );
-  }, [handleReset, dispatch, soldOut, categoryData, dayData, regionData]);
+  }, [handleReset, dispatch, categoryData, dayData, regionData, soldOut]);
 
   const handleClickSoldOut = () => {
     dispatch(isSoldOut(soldOut));
@@ -47,94 +47,102 @@ const UpcomingList = () => {
     handleRefresh();
     dispatch(
       __getListMore({
-        offset: offset,
         salonCategory: getString(categoryData),
         dayOfWeek: getString(dayData),
         region: getString(regionData),
         soldOut,
+        offset: offset,
       }),
     );
   };
 
   return (
-    <SUpcomingListContainer>
-      <SCategoryContainer>
+    <S.UpcomingListContainer>
+      <S.CategoryContainer>
         {categoryArr.map((category) => (
           <Category key={category.name} category={category} selectedData={categoryData} />
         ))}
-      </SCategoryContainer>
+      </S.CategoryContainer>
 
-      <SSoldoutChecked>
+      <S.SoldOutContainer>
         <img
           src={soldOut === false ? checked : unchecked}
           alt="check"
           onClick={handleClickSoldOut}
         />
         <span onClick={handleClickSoldOut}>마감 모임 제외</span>
-      </SSoldoutChecked>
+      </S.SoldOutContainer>
 
-      <SDropdownContainer>
+      <S.DropdownContainer>
         <Dropdown name="지역" arr={regionArr} selectedData={regionData} />
         <Dropdown name="요일" arr={dayArr} selectedData={dayData} />
-      </SDropdownContainer>
+      </S.DropdownContainer>
 
-      <SCardContainer>
+      <S.CardContainer>
         {upcomingList?.map((item) => (
           <MeetupCard key={item.id} item={item} />
         ))}
-      </SCardContainer>
+      </S.CardContainer>
+
       {isNext && <span onClick={handleGetMore}>더 보기</span>}
-    </SUpcomingListContainer>
+    </S.UpcomingListContainer>
   );
 };
 
-const SUpcomingListContainer = styled.div`
-  padding-top: 2rem;
-`;
+const S = {
+  UpcomingListContainer: styled.div`
+    padding-top: 2rem;
+  `,
 
-const SCategoryContainer = styled.div`
-  display: flex;
-  gap: 0.8rem;
-  flex-wrap: nowrap;
-  overflow-x: scroll;
+  CategoryContainer: styled.div`
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
 
-  padding: 2rem;
+    padding: 2rem;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
-  > div {
-    flex-shrink: 0;
-  }
-`;
+    > div {
+      flex-shrink: 0;
+    }
+  `,
 
-const SSoldoutChecked = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  SoldOutContainer: styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 
-  padding: 0 2rem;
+    padding: 0 2rem;
 
-  font-size: 1.2rem;
-`;
+    font-size: 1.2rem;
 
-const SDropdownContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+    img,
+    span {
+      cursor: pointer;
+    }
+  `,
 
-  padding: 1rem 2rem;
-`;
+  DropdownContainer: styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 
-const SCardContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+    padding: 1rem 2rem;
+  `,
 
-  row-gap: 2.1rem;
-  column-gap: 1.2rem;
+  CardContainer: styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 
-  padding: 2rem;
-`;
+    row-gap: 2.1rem;
+    column-gap: 1.2rem;
+
+    padding: 2rem;
+  `,
+};
 
 export default UpcomingList;

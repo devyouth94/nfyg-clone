@@ -1,9 +1,10 @@
 import React from "react";
-import { WithIcon } from "static/icon/WithIcon";
-import styled, { css } from "styled-components";
+import TextBackground from "components/common/meetupCard/TextBackground";
 import { categoryArr } from "utils/arr";
 import { isPast } from "utils/date";
-import TextBackground from "./TextBackground";
+import { WithIcon } from "static/icon/WithIcon";
+import { MAIN_COLOR } from "styles/colorPalette";
+import styled, { css } from "styled-components";
 
 const MeetupCardImage = ({ item }) => {
   const [category] = categoryArr.filter((value) => value.name === item.tags.salonCategory[0]);
@@ -114,11 +115,12 @@ const S = {
     align-items: center;
 
     width: 100%;
-    height: 2.5rem;
+    min-height: 2.5rem;
+    padding: 0.5rem 0;
     background-color: ${(props) => props.color};
 
     font-size: 1.1rem;
-    color: #fff;
+    color: ${MAIN_COLOR.white};
 
     > span:nth-child(1) {
       font-weight: 700;
@@ -130,7 +132,8 @@ const S = {
     }
 
     > span:nth-child(3) {
-      max-width: 10rem;
+      max-width: 9rem;
+      line-height: 1.3rem;
     }
   `,
 };
