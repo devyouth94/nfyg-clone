@@ -26,6 +26,7 @@ const MAIN_COLOR = {
   gray1: "#dadce0",
   gray2: "#aaa",
   gray3: "#666",
+  red: "#D01010",
 
   hover: "aliceblue",
 };

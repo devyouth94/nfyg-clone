@@ -1,4 +1,5 @@
 import React from "react";
+import Badge from "components/common/meetupCard/Badge";
 import TextBackground from "components/common/meetupCard/TextBackground";
 import { categoryArr } from "utils/arr";
 import { isPast } from "utils/date";
@@ -12,38 +13,38 @@ const MeetupCardImage = ({ item }) => {
   const isWith = item.additionalInformation.memberLed;
 
   return (
-    <S.ImageContainer
-      color={category.lightColor}
-      isFull={isFull}
-      isPast={isPast(item.sessions[0].date)}
-    >
-      {isWith && (
-        <>
-          <S.ThumbnailImage color={category.color}>
-            <img src={item.thumbnailUrl} alt="thumbnailImage" />
-          </S.ThumbnailImage>
+    <S.ImageContainer>
+      <Badge item={item} color={category.color} />
 
-          <TextBackground category={category.name} />
-        </>
-      )}
+      <S.Image color={category.lightColor} isFull={isFull} isPast={isPast(item.sessions[0].date)}>
+        {isWith && (
+          <>
+            <S.ThumbnailImage color={category.color}>
+              <img className="card-image" src={item.thumbnailUrl} alt="thumbnailImage" />
+            </S.ThumbnailImage>
 
-      {!isWith && (
-        <>
-          <S.WithIcon>
-            <WithIcon color={category.color} />
-          </S.WithIcon>
+            <TextBackground category={category.name} />
+          </>
+        )}
 
-          <S.ProfileImage color={category.color}>
-            <img src={item.host.profileImageUrl} alt="hostImage" />
-          </S.ProfileImage>
+        {!isWith && (
+          <>
+            <S.WithIcon>
+              <WithIcon color={category.color} />
+            </S.WithIcon>
 
-          <S.NameTag color={category.color}>
-            <span>{item.host.name}</span>
-            <span>|</span>
-            <span>{item.host.title}</span>
-          </S.NameTag>
-        </>
-      )}
+            <S.ProfileImage color={category.color}>
+              <img className="card-image" src={item.host.profileImageUrl} alt="hostImage" />
+            </S.ProfileImage>
+
+            <S.NameTag color={category.color}>
+              <span>{item.host.name}</span>
+              <span>|</span>
+              <span>{item.host.title}</span>
+            </S.NameTag>
+          </>
+        )}
+      </S.Image>
     </S.ImageContainer>
   );
 };
@@ -51,7 +52,9 @@ const MeetupCardImage = ({ item }) => {
 const S = {
   ImageContainer: styled.div`
     position: relative;
+  `,
 
+  Image: styled.div`
     width: 100%;
     height: 13rem;
     background-color: ${(props) => props.color};

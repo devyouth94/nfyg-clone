@@ -19,6 +19,16 @@ const S = {
     border-radius: 1rem;
 
     cursor: pointer;
+
+    .card-image {
+      transition-duration: 0.3s;
+    }
+
+    &:hover {
+      .card-image {
+        transform: scale(1.1);
+      }
+    }
   `,
 };
 
