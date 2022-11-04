@@ -21,6 +21,8 @@ const S = {
       font-size: 1.4rem;
       transition-duration: 0.3s;
 
+      cursor: pointer;
+
       &:hover {
         font-weight: 700;
       }
