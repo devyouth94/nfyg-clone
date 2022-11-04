@@ -28,4 +28,10 @@ const displayTime = (value) => {
   return `${Math.floor(years)}년 전`;
 };
 
-export { convertDate, displayTime };
+const isPast = (startDate) => {
+  const milliSeconds = new Date() - new Date(startDate);
+
+  return milliSeconds > 0;
+};
+
+export { convertDate, displayTime, isPast };

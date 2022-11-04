@@ -20,4 +20,9 @@ const COLOR_BRIGHT = {
   Writing: "#EDF2FF",
 };
 
-export { COLOR, COLOR_BRIGHT };
+const MAIN_COLOR = {
+  white: "#fff",
+  black: "#000",
+};
+
+export { COLOR, COLOR_BRIGHT, MAIN_COLOR };

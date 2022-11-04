@@ -1,7 +1,7 @@
-import { COLOR, COLOR_BRIGHT } from "styles/colorPalette";
+import { COLOR, COLOR_BRIGHT, MAIN_COLOR } from "styles/colorPalette";
 
 const categoryArr = [
-  { name: "전체", color: "#000", lightColor: "###" },
+  { name: "전체", color: MAIN_COLOR.black, lightColor: MAIN_COLOR.black },
   { name: "라이프스타일", color: COLOR.Lifestyle, lightColor: COLOR_BRIGHT.Lifestyle },
   { name: "영화와 넷플릭스", color: COLOR.Movie, lightColor: COLOR_BRIGHT.Movie },
   { name: "사유의 확장", color: COLOR.Philosophy, lightColor: COLOR_BRIGHT.Philosophy },
