@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import instance from "apis/instance";
-import MeetupCard from "components/MeetupCard";
+import MeetupCard from "components/common/meetupCard/MeetupCard";
 
 import styled from "styled-components";
 import { useCallback } from "react";

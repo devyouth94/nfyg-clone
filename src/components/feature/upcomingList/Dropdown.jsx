@@ -1,5 +1,5 @@
-import { useQueryContext } from "contexts/QueryContext";
 import React, { useState } from "react";
+import { useQueryContext } from "contexts/QueryContext";
 import styled from "styled-components";
 
 const Dropdown = ({ arr, name }) => {

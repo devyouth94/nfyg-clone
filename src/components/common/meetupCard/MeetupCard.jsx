@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { convertDate } from "utils/date";
-import CardImage from "./Card/CardImage";
-import Imoji from "./Card/Imoji";
+import CardImage from "./CardImage";
+import Imoji from "../Imoji";
 
 const MeetupCard = ({ item }) => {
   return (

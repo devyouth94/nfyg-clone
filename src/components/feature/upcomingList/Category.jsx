@@ -1,7 +1,7 @@
-import { useQueryContext } from "contexts/QueryContext";
 import React, { useState } from "react";
+import { useQueryContext } from "contexts/QueryContext";
+import Imoji from "components/common/Imoji";
 import styled from "styled-components";
-import Imoji from "./Card/Imoji";
 
 const Category = ({ category }) => {
   const { handleGetQuery, handleDelQuery } = useQueryContext();
@@ -25,7 +25,7 @@ const Category = ({ category }) => {
   };
 
   return (
-    <SCategoryBox
+    <S.CategoryCard
       key={category.name}
       onClick={() => handleCategoryClick(category.name)}
       include={selectedCategory.includes(category.name)}
@@ -33,26 +33,28 @@ const Category = ({ category }) => {
     >
       <Imoji category={category.name} include={selectedCategory.includes(category.name)} />
       {category.name}
-    </SCategoryBox>
+    </S.CategoryCard>
   );
 };
 
-const SCategoryBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.4rem;
+const S = {
+  CategoryCard: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
 
-  width: fit-content;
-  height: 4rem;
-  padding: 1rem;
-  background-color: ${(props) => (props.include ? props.color : "#fff")};
+    width: fit-content;
+    height: 4rem;
+    padding: 1rem;
+    background-color: ${(props) => (props.include ? props.color : "#fff")};
 
-  border: 1px solid #dadce0;
-  border-radius: 1rem;
+    border: 1px solid #dadce0;
+    border-radius: 1rem;
 
-  font-size: 1.2rem;
-  color: ${(props) => (props.include ? "#fff" : "#000")};
-`;
+    font-size: 1.2rem;
+    color: ${(props) => (props.include ? "#fff" : "#000")};
+  `,
+};
 
 export default Category;

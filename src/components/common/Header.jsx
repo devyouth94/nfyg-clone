@@ -8,33 +8,35 @@ import styled from "styled-components";
 
 const Header = () => {
   return (
-    <SHeader>
+    <S.Header>
       <img src={nav} alt="nav" />
       <img src={logo} alt="logo" />
       <img src={profile} alt="profile" />
-    </SHeader>
+    </S.Header>
   );
 };
 
-const SHeader = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+const S = {
+  Header: styled.header`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-  height: 5.6rem;
-  padding: 0 1.5rem;
+    height: 5.6rem;
+    padding: 0 1.5rem;
 
-  img {
-    cursor: pointer;
-  }
+    img {
+      cursor: pointer;
+    }
 
-  > img:nth-child(1) {
-    width: 4rem;
-  }
+    > img:nth-child(1) {
+      width: 4rem;
+    }
 
-  > img:nth-child(3) {
-    width: 2.8rem;
-  }
-`;
+    > img:nth-child(3) {
+      width: 2.8rem;
+    }
+  `,
+};
 
 export default Header;

@@ -2,9 +2,9 @@ import React, { useEffect, useState, useCallback } from "react";
 
 import instance from "apis/instance";
 
-import MeetupCard from "components/MeetupCard";
-import Dropdown from "components/Dropdown";
-import Category from "./Category";
+import MeetupCard from "components/common/meetupCard/MeetupCard";
+import Dropdown from "components/feature/upcomingList/Dropdown";
+import Category from "components/feature/upcomingList/Category";
 
 import checked from "static/icon/ic_check_on.svg";
 import unchecked from "static/icon/ic_check_sm_off.svg";
@@ -54,7 +54,7 @@ const UpcomingList = () => {
     });
     setUpcomingList(data.data.meetups);
     setIsNext(data.data.pagination.nextPage);
-  }, [query.category, query.day, query.region]);
+  }, [params.soldOut, query.category, query.day, query.region]);
 
   useEffect(() => {
     handleGetList();
