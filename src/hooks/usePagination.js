@@ -1,19 +1,23 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
-const usePagination = (limitItem, maxPage = 99) => {
-  const [page, setPage] = useState(1);
+const usePagination = (limitItem, startPage = 1, maxPage) => {
+  const [page, setPage] = useState(startPage);
   const limit = limitItem;
   const offset = (page - 1) * limit;
 
   const handleRefresh = () => {
     if (page > maxPage) {
-      setPage(1);
+      setPage(startPage);
     } else {
       setPage((prev) => prev + 1);
     }
   };
 
-  return { limit, offset, handleRefresh };
+  const handleReset = useCallback(() => {
+    setPage(startPage);
+  }, [startPage]);
+
+  return { limit, offset, handleRefresh, handleReset };
 };
 
 export default usePagination;
