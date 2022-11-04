@@ -5,6 +5,7 @@ import Info from "components/feature/info/Info";
 import Introduce from "components/feature/introduce/Introduce";
 import UpcomingList from "components/feature/upcomingList/UpcomingList";
 import ProceedingList from "components/feature/proceedingList/ProceedingList";
+import Footer from "components/feature/footer/Footer";
 
 const App = () => {
   return (
@@ -20,6 +21,8 @@ const App = () => {
       <UpcomingList />
 
       <ProceedingList />
+
+      <Footer />
     </Layout>
   );
 };
