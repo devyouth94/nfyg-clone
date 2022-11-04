@@ -2,7 +2,7 @@
 //[사과, 오렌지] => "사과,오렌지"
 
 const getString = (arr) => {
-  if (!arr.length) return;
+  if (!arr.length) return null;
 
   return arr.join(",");
 };
