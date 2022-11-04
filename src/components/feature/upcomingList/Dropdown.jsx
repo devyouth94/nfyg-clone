@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { getSelect, delSelect } from "app/slices/selectSlice";
+import { getSelect, delSelect, resetSelect } from "app/slices/selectSlice";
 import { MAIN_COLOR } from "styles/colorPalette";
+import { HiChevronDown as IconArrowDown } from "react-icons/hi";
+import { IoCloseCircle as IconCancel } from "react-icons/io5";
+import { IoClose as IconClose } from "react-icons/io5";
 import styled from "styled-components";
 
 const Dropdown = ({ arr, name, selectedData }) => {
@@ -25,6 +28,12 @@ const Dropdown = ({ arr, name, selectedData }) => {
     setIsDrop(true);
   };
 
+  const handleResetItem = () => {
+    dispatch(resetSelect({ name }));
+    setNewArr(arr);
+    setIsDrop(true);
+  };
+
   return (
     <S.DropdownContainer>
       <S.Input onClick={handleClickDrop}>
@@ -32,14 +41,17 @@ const Dropdown = ({ arr, name, selectedData }) => {
           <S.SelectedItem>
             {selectedData.map((item) => (
               <div key={item}>
-                {item} <span onClick={() => handleCancelItem(item)}>❌</span>
+                {item} <S.IconCancel onClick={() => handleCancelItem(item)} />
               </div>
             ))}
+            <S.IconClose onClick={handleResetItem} />
           </S.SelectedItem>
         ) : (
           <span>{name} 선택</span>
         )}
-        <span>↓</span>
+        <span>
+          <IconArrowDown />
+        </span>
       </S.Input>
 
       {isDrop && (
@@ -63,7 +75,7 @@ const S = {
 
   Input: styled.div`
     display: grid;
-    grid-template-columns: auto 3.6rem;
+    grid-template-columns: auto 3.5rem;
     align-items: center;
 
     width: 100%;
@@ -74,6 +86,7 @@ const S = {
     border-radius: 1rem;
 
     cursor: pointer;
+    transition-duration: 0.3s;
 
     &:hover {
       border: 1px solid ${MAIN_COLOR.gray2};
@@ -95,12 +108,43 @@ const S = {
   `,
 
   SelectedItem: styled.div`
+    position: relative;
+
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
 
+    padding-right: 2rem;
+
     > div {
-      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+
+      font-size: 1.2rem;
+    }
+  `,
+
+  IconClose: styled(IconClose)`
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+
+    color: ${MAIN_COLOR.gray2};
+    transition-duration: 0.3s;
+
+    &:hover {
+      color: ${MAIN_COLOR.black};
+    }
+  `,
+
+  IconCancel: styled(IconCancel)`
+    color: ${MAIN_COLOR.gray2};
+    transition-duration: 0.3s;
+
+    &:hover {
+      color: ${MAIN_COLOR.black};
     }
   `,
 
@@ -118,7 +162,7 @@ const S = {
 
     overflow-y: scroll;
 
-    z-index: 99;
+    z-index: 999;
 
     cursor: pointer;
 
