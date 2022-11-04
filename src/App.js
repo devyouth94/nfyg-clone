@@ -1,15 +1,14 @@
-import Header from "components/Header";
-import Advertisement from "components/Advertisement";
-import Info from "components/Info";
-import Introduce from "components/Introduce";
-import UpcomingList from "components/UpcomingList";
-import ProceedingList from "components/ProceedingList";
-
-import styled from "styled-components";
+import Layout from "components/common/Layout";
+import Header from "components/common/Header";
+import Advertisement from "components/feature/advertisement/Advertisement";
+import Info from "components/feature/info/Info";
+import Introduce from "components/feature/introduce/Introduce";
+import UpcomingList from "components/feature/upcomingList/UpcomingList";
+import ProceedingList from "components/feature/proceedingList/ProceedingList";
 
 const App = () => {
   return (
-    <SLayout>
+    <Layout>
       <Header />
 
       <Advertisement />
@@ -21,16 +20,8 @@ const App = () => {
       <UpcomingList />
 
       <ProceedingList />
-    </SLayout>
+    </Layout>
   );
 };
-
-const SLayout = styled.div`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-
-  width: 375px;
-`;
 
 export default App;
