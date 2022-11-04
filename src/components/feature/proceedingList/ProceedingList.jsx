@@ -1,45 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
-import instance from "apis/instance";
+import instance from "app/instance";
 import MeetupCard from "components/common/meetupCard/MeetupCard";
+import usePagination from "hooks/usePagination";
+import { basicParams } from "utils/params";
 
 import styled from "styled-components";
-import { useCallback } from "react";
 
 const ProceedingList = () => {
+  const { offset, handleRefresh } = usePagination(20);
   const [proceedingList, setProceedingList] = useState([]);
   const [isNext, setIsNext] = useState(null);
 
-  const [params, setParams] = useState({
-    type: 1,
-    season: 7,
-    order: "salon_category_asc",
-    upcoming: false,
-    limit: 20,
-    offset: 0,
-  });
-
-  const handleGetMore = async () => {
-    const { data } = await instance.get("/meetups", {
-      params: {
-        ...params,
-        offset: params.offset + params.limit,
-      },
-    });
-    setProceedingList((prev) => [...prev, ...data.data.meetups]);
-    setParams((prev) => ({ ...prev, offset: params.offset + params.limit }));
-    setIsNext(data.data.pagination.nextPage);
-  };
-
   const handleGetList = useCallback(async () => {
-    const { data } = await instance.get("/meetups", { params });
-    setProceedingList(data.data.meetups);
+    const { data } = await instance.get("/v2/nfyg/meetups", {
+      params: { ...basicParams, upcoming: false, offset },
+    });
+
+    setProceedingList((prev) => [
+      ...prev,
+      ...data.data.meetups.filter((value) => !prev.some((item) => item.id === value.id)),
+    ]);
     setIsNext(data.data.pagination.nextPage);
-  }, []);
+  }, [offset]);
 
   useEffect(() => {
     handleGetList();
   }, [handleGetList]);
+
+  const handleGetMore = () => {
+    handleRefresh();
+  };
 
   return (
     <SListContainer>
@@ -54,14 +45,15 @@ const ProceedingList = () => {
         {proceedingList?.map((item) => (
           <MeetupCard key={item.id} item={item} />
         ))}
-        {isNext && <span onClick={handleGetMore}>더보기</span>}
       </SCardContainer>
+
+      {isNext && <span onClick={handleGetMore}>더보기</span>}
     </SListContainer>
   );
 };
 
 const SListContainer = styled.div`
-  padding: 2rem;
+  padding: 3rem 2rem 2rem 2rem;
 
   h1 {
     font-size: 2rem;
@@ -83,7 +75,7 @@ const SCardContainer = styled.div`
   row-gap: 2.1rem;
   column-gap: 1.2rem;
 
-  margin-top: 2rem;
+  margin: 2rem 0 2rem 0;
 `;
 
 export default ProceedingList;
