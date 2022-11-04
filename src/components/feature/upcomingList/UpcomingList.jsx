@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from "react";
-
-import instance from "apis/instance";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { __getList, __getListMore } from "app/slices/upcomingListSlice";
 
 import MeetupCard from "components/common/meetupCard/MeetupCard";
 import Dropdown from "components/feature/upcomingList/Dropdown";
@@ -8,77 +8,66 @@ import Category from "components/feature/upcomingList/Category";
 
 import checked from "static/icon/ic_check_on.svg";
 import unchecked from "static/icon/ic_check_sm_off.svg";
+import { getString } from "utils/getString";
+import { dayArr, regionArr, categoryArr } from "utils/arr";
 
 import styled from "styled-components";
-import { dayArr, regionArr, categoryArr } from "utils/arr";
-import { useQueryContext } from "contexts/QueryContext";
+import { isSoldOut } from "app/slices/selectSlice";
+import usePagination from "hooks/usePagination";
 
 const UpcomingList = () => {
-  const { query } = useQueryContext();
-  const [upcomingList, setUpcomingList] = useState([]);
-  const [isNext, setIsNext] = useState(null);
+  const dispatch = useDispatch();
+  const { offset, handleRefresh, handleReset } = usePagination(20, 2);
 
-  const [params, setParams] = useState({
-    type: 1,
-    season: 7,
-    order: "salon_category_asc",
-    upcoming: true,
-    limit: 20,
-    offset: 0,
-    soldOut: null,
-  });
-
-  const handleGetMore = async () => {
-    const { data } = await instance.get("/meetups", {
-      params: {
-        ...params,
-        salonCategory: query.category,
-        dayOfWeek: query.day,
-        region: query.region,
-        offset: params.offset + params.limit,
-      },
-    });
-    setUpcomingList((prev) => [...prev, ...data.data.meetups]);
-    setParams((prev) => ({ ...prev, offset: params.offset + params.limit }));
-    setIsNext(data.data.pagination.nextPage);
-  };
-
-  const handleGetList = useCallback(async () => {
-    const { data } = await instance.get("/meetups", {
-      params: {
-        ...params,
-        salonCategory: query.category,
-        dayOfWeek: query.day,
-        region: query.region,
-      },
-    });
-    setUpcomingList(data.data.meetups);
-    setIsNext(data.data.pagination.nextPage);
-  }, [params.soldOut, query.category, query.day, query.region]);
+  const {
+    category: categoryData,
+    day: dayData,
+    region: regionData,
+    soldOut,
+  } = useSelector((state) => state.select);
+  const { data: upcomingList, isNext } = useSelector((state) => state.upcomingList);
 
   useEffect(() => {
-    handleGetList();
-  }, [handleGetList]);
+    handleReset();
+    dispatch(
+      __getList({
+        offset: 0,
+        salonCategory: getString(categoryData),
+        dayOfWeek: getString(dayData),
+        region: getString(regionData),
+        soldOut,
+      }),
+    );
+  }, [handleReset, dispatch, soldOut, categoryData, dayData, regionData]);
 
   const handleClickSoldOut = () => {
-    if (params.soldOut === null) {
-      setParams((prev) => ({ ...prev, soldOut: false }));
-    } else {
-      setParams((prev) => ({ ...prev, soldOut: null }));
-    }
+    dispatch(isSoldOut(soldOut));
+  };
+
+  const handleGetMore = () => {
+    handleRefresh();
+    dispatch(
+      __getListMore({
+        offset: offset,
+        salonCategory: getString(categoryData),
+        dayOfWeek: getString(dayData),
+        region: getString(regionData),
+        soldOut,
+      }),
+    );
   };
 
   return (
     <SUpcomingListContainer>
       <SCategoryContainer>
         {categoryArr.map((category) => (
-          <Category key={category.name} category={category} />
+          <Category key={category.name} category={category} selectedData={categoryData} />
         ))}
       </SCategoryContainer>
 
       <SSoldoutChecked>
         <img
-          src={params.soldOut === false ? checked : unchecked}
+          src={soldOut === false ? checked : unchecked}
           alt="check"
           onClick={handleClickSoldOut}
         />
@@ -86,17 +75,16 @@ const UpcomingList = () => {
       </SSoldoutChecked>
 
       <SDropdownContainer>
-        <Dropdown name="지역" arr={regionArr} />
-        <Dropdown name="요일" arr={dayArr} />
+        <Dropdown name="지역" arr={regionArr} selectedData={regionData} />
+        <Dropdown name="요일" arr={dayArr} selectedData={dayData} />
       </SDropdownContainer>
 
       <SCardContainer>
         {upcomingList?.map((item) => (
           <MeetupCard key={item.id} item={item} />
         ))}
-
-        {isNext && <span onClick={handleGetMore}>더 보기</span>}
       </SCardContainer>
+      {isNext && <span onClick={handleGetMore}>더 보기</span>}
     </SUpcomingListContainer>
   );
 };
