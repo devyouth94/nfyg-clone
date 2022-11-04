@@ -1,26 +1,24 @@
-import React, { useState } from "react";
-import { useQueryContext } from "contexts/QueryContext";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { getSelect, delSelect, resetSelect } from "app/slices/selectSlice";
 import Imoji from "components/common/Imoji";
 import styled from "styled-components";
 
-const Category = ({ category }) => {
-  const { handleGetQuery, handleDelQuery } = useQueryContext();
-  const [selectedCategory, setSelectedCategory] = useState([]);
+const Category = ({ category, selectedData }) => {
+  const dispatch = useDispatch();
 
-  const handleCategoryClick = (category) => {
-    if (category === "전체" && !selectedCategory.length) return;
+  const handleCategoryClick = (item) => {
+    if (item === "전체" && !selectedData.length) return;
 
-    if (category === "전체") {
-      setSelectedCategory([]);
+    if (item === "전체") {
+      dispatch(resetSelect({ name: "카테고리" }));
       return;
     }
 
-    if (selectedCategory.includes(category)) {
-      handleDelQuery("카테고리", category);
-      setSelectedCategory((prev) => prev.filter((item) => item !== category));
+    if (selectedData.includes(item)) {
+      dispatch(delSelect({ name: "카테고리", item }));
     } else {
-      handleGetQuery("카테고리", category);
-      setSelectedCategory((prev) => [...prev, category]);
+      dispatch(getSelect({ name: "카테고리", item }));
     }
   };
 
@@ -28,10 +26,10 @@ const Category = ({ category }) => {
     <S.CategoryCard
       key={category.name}
       onClick={() => handleCategoryClick(category.name)}
-      include={selectedCategory.includes(category.name)}
+      include={selectedData.includes(category.name)}
       color={category.color}
     >
-      <Imoji category={category.name} include={selectedCategory.includes(category.name)} />
+      <Imoji category={category.name} include={selectedData.includes(category.name)} />
       {category.name}
     </S.CategoryCard>
   );
