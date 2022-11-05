@@ -6,19 +6,19 @@
 git clone ...
 ```
 
-1. 모듈을 설치합니다
+2. 모듈을 설치합니다
 
 ```
 npm install
 ```
 
-1. .env 파일 추가 후 아래 코드를 작성합니다
+3. `.env` 파일 추가 후 아래 코드를 작성합니다
 
 ```
 REACT_APP_API_URL = https://api.knkn.co
 ```
 
-1. 로컬 환경으로 실행합니다
+4. 로컬 환경으로 실행합니다
 
 ```
 npm start
