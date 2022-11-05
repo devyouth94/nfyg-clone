@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import instance from "app/instance";
-import HelpText from "components/common/HelpText";
+import LoadMore from "components/common/LoadMore";
 import MeetupCard from "components/common/meetupCard/MeetupCard";
 import usePagination from "hooks/usePagination";
 import { basicParams } from "utils/params";
@@ -50,7 +50,7 @@ const ProceedingList = () => {
         ))}
       </S.CardContainer>
 
-      {isNext && <HelpText onClick={handleGetMore} isLoading={isLoading} />}
+      {isNext && <LoadMore onClick={handleGetMore} isLoading={isLoading} />}
     </S.ListContainer>
   );
 };

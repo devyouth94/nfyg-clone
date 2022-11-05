@@ -7,7 +7,7 @@ import { __getList, __getListMore } from "app/slices/upcomingListSlice";
 import MeetupCard from "components/common/meetupCard/MeetupCard";
 import Dropdown from "components/feature/upcomingList/Dropdown";
 import Category from "components/feature/upcomingList/Category";
-import HelpText from "components/common/HelpText";
+import LoadMore from "components/common/LoadMore";
 
 import usePagination from "hooks/usePagination";
 import { getString } from "utils/getString";
@@ -85,7 +85,7 @@ const UpcomingList = () => {
         ))}
       </S.CardContainer>
 
-      {isNext && <HelpText onClick={handleGetMore} isLoading={isLoading} />}
+      {isNext && <LoadMore onClick={handleGetMore} isLoading={isLoading} />}
     </S.UpcomingListContainer>
   );
 };

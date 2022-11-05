@@ -2,7 +2,7 @@ import React from "react";
 import { MAIN_COLOR } from "styles/colorPalette";
 import styled from "styled-components";
 
-const HelpText = ({ onClick, isLoading }) => {
+const LoadMore = ({ onClick, isLoading }) => {
   return (
     <S.HelpText>{isLoading ? <S.Loader /> : <span onClick={onClick}>더 보기</span>}</S.HelpText>
   );
@@ -48,4 +48,4 @@ const S = {
   `,
 };
 
-export default HelpText;
+export default LoadMore;
