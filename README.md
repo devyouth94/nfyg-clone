@@ -38,9 +38,9 @@ npm start
 1. 어떤 데이터를 전역 상태로 관리할까?
    - 하나의 컴포넌트에서만 데이터 변경이 일어나지 않는 데이터들을 전역 상태로 관리했습니다. 자식 컴포넌트 간의 원활한 데이터 이동이 필요했기 때문입니다.
    - 사용자들이 선택한 값들(카테고리, 지역, 마감 제외, 요일)을 하나의 파일에서 관리하고 데이터를 사용할 수 있도록 했습니다.
-     [src/app/slices/selectSlice.js](https://github.com/devyouth94/nfyg-clone/blob/e2f75546b7d9a0964575f3eb5a6107929cdad5c0/src/app/slices/selectSlice.js)
+     <br/>[src/app/slices/selectSlice.js](https://github.com/devyouth94/nfyg-clone/blob/e2f75546b7d9a0964575f3eb5a6107929cdad5c0/src/app/slices/selectSlice.js)
    - 사용자가 선택한 값을 기반으로 데이터를 불러오는 api와 불러온 데이터도 전역으로 관리했습니다.
-     [5c0/src/app/slices/upcomingListSlice.js](https://github.com/devyouth94/nfyg-clone/blob/e2f75546b7d9a0964575f3eb5a6107929cdad5c0/src/app/slices/upcomingListSlice.js)
+     <br/>[src/app/slices/upcomingListSlice.js](https://github.com/devyouth94/nfyg-clone/blob/e2f75546b7d9a0964575f3eb5a6107929cdad5c0/src/app/slices/upcomingListSlice.js)
 2. 쿼리 스트링을 어떻게 관리하고 요청할까?
    - 사용자가 선택 시 바로 요청이 가야했고, 관리하는 쿼리가 많아서 어떻게 하면 효율적으로 관리하고 보낼 수 있을지 고민했습니다.
    - 기본적인 쿼리 값들은 객체로 관리했습니다.
