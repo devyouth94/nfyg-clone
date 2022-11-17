@@ -1,6 +1,6 @@
 import Salons from "pages/Salons";
 
-const { Routes, Route } = require("react-router-dom");
+import { Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
