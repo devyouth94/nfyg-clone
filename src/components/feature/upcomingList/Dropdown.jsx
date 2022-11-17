@@ -7,36 +7,28 @@ import { IoCloseCircle as IconCancel } from "react-icons/io5";
 import { IoClose as IconClose } from "react-icons/io5";
 import styled from "styled-components";
 
-const Dropdown = ({ arr, name, selectedData }) => {
+const Dropdown = ({ arr, name, selectedData, dropdown }) => {
   const dispatch = useDispatch();
   const [newArr, setNewArr] = useState(arr);
-  const [isDrop, setIsDrop] = useState(false);
-
-  const handleClickDrop = () => {
-    setIsDrop((prev) => !prev);
-  };
 
   const handleClickItem = (item) => {
     dispatch(getSelect({ name, item }));
     setNewArr((prev) => prev.filter((value) => value !== item));
-    setIsDrop((prev) => !prev);
   };
 
   const handleCancelItem = (item) => {
     dispatch(delSelect({ name, item }));
     setNewArr(arr.filter((value) => value === item || !selectedData.includes(value)));
-    setIsDrop(true);
   };
 
   const handleResetItem = () => {
     dispatch(resetSelect({ name }));
     setNewArr(arr);
-    setIsDrop(true);
   };
 
   return (
     <S.DropdownContainer>
-      <S.Input onClick={handleClickDrop}>
+      <S.Input onClick={dropdown.handleClick} ref={dropdown.dropRef}>
         {selectedData.length ? (
           <S.SelectedItem>
             {selectedData.map((item) => (
@@ -54,7 +46,7 @@ const Dropdown = ({ arr, name, selectedData }) => {
         </span>
       </S.Input>
 
-      {isDrop && (
+      {dropdown.isOpen && (
         <S.Menu>
           {newArr.map((item) => (
             <li key={item} onClick={() => handleClickItem(item)}>
