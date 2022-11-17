@@ -1,4 +1,3 @@
-import React from "react";
 import banner from "static/img/coming_soon_banner.jpg";
 import styled from "styled-components";
 

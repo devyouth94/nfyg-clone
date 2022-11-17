@@ -1,4 +1,3 @@
-import React from "react";
 import {
   TagAll,
   TagCareer,
@@ -12,7 +11,12 @@ import {
 } from "static/icon/TagIcons";
 import { COLOR, MAIN_COLOR } from "styles/colorPalette";
 
-const Imoji = ({ category, include }) => {
+interface IProps {
+  category: string;
+  include?: boolean;
+}
+
+const Imoji = ({ category, include }: IProps) => {
   switch (category) {
     case "전체":
       return <TagAll color={include ? MAIN_COLOR.white : MAIN_COLOR.black} />;
@@ -33,7 +37,7 @@ const Imoji = ({ category, include }) => {
     case "일과 커리어":
       return <TagCareer color={include ? MAIN_COLOR.white : COLOR.Career} />;
     default:
-      break;
+      return <></>;
   }
 };
 

@@ -1,10 +1,14 @@
-import React from "react";
 import Imoji from "components/common/Imoji";
 import { displayTime } from "utils/date";
 import { MAIN_COLOR } from "styles/colorPalette";
 import styled from "styled-components";
+import { IIntroduce } from "utils/types";
 
-const IntroduceCard = ({ item }) => {
+interface IProps {
+  item: IIntroduce;
+}
+
+const IntroduceCard = ({ item }: IProps) => {
   return (
     <S.Card>
       <div>

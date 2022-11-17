@@ -1,4 +1,3 @@
-import React from "react";
 import nav from "static/icon/icon_nav_menu.svg";
 import logo from "static/icon/logo_small.svg";
 import profile from "static/icon/img_profile_default.svg";

@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-const Layout = ({ children }) => {
+interface IProps {
+  children: React.ReactNode;
+}
+
+const Layout = ({ children }: IProps) => {
   return <S.Layout>{children}</S.Layout>;
 };
 

@@ -1,20 +1,26 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import instance from "app/instance";
 import IntroduceCard from "components/feature/introduce/IntroduceCard";
+
 import usePagination from "hooks/usePagination";
+import { IIntroduce } from "utils/types";
+
 import shuffle from "static/icon/shuffle_gray.svg";
 import styled from "styled-components";
+import axios from "axios";
 
 const Introduce = () => {
   const { limit, offset, handleRefresh } = usePagination(4, 1, 9);
-  const [introduce, setIntroduce] = useState([]);
+  const [introduce, setIntroduce] = useState<IIntroduce[]>([]);
 
   const handleGetIntroduce = async () => {
     try {
       const { data } = await instance.get("/v2/nfyg/introductions");
       setIntroduce((prev) => [...prev, ...data.data.introductions]);
     } catch (error) {
-      throw new Error(error);
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.message);
+      }
     }
   };
 
