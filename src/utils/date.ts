@@ -1,4 +1,4 @@
-const convertDate = (startDate) => {
+const convertDate = (startDate: string) => {
   const newDate = new Date(startDate);
   const weekArr = "일월화수목금토".split("");
 
@@ -9,8 +9,8 @@ const convertDate = (startDate) => {
   return `${month}월 ${date}일 · ${dayOfWeek}요일`;
 };
 
-const displayTime = (value) => {
-  const milliSeconds = new Date() - new Date(value);
+const displayTime = (value: string) => {
+  const milliSeconds = Number(new Date()) - Number(new Date(value));
 
   const seconds = milliSeconds / 1000;
   if (seconds < 60) return `방금 전`;
@@ -28,8 +28,8 @@ const displayTime = (value) => {
   return `${Math.floor(years)}년 전`;
 };
 
-const isPast = (startDate) => {
-  const milliSeconds = new Date() - new Date(startDate);
+const isPast = (startDate: string) => {
+  const milliSeconds = Number(new Date()) - Number(new Date(startDate));
 
   return milliSeconds > 0;
 };
