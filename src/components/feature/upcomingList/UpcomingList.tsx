@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 
 import { isSoldOut } from "app/slices/selectSlice";
 import { __getList, __getListMore } from "app/slices/upcomingListSlice";
@@ -9,6 +9,7 @@ import Dropdown from "components/feature/upcomingList/Dropdown";
 import Category from "components/feature/upcomingList/Category";
 import LoadMore from "components/common/LoadMore";
 
+import useDropdown from "hooks/useDropdown";
 import usePagination from "hooks/usePagination";
 import { getString } from "utils/getString";
 import { dayArr, regionArr, categoryArr } from "utils/arr";
@@ -18,15 +19,18 @@ import unchecked from "static/icon/ic_check_sm_off.svg";
 import styled from "styled-components";
 
 const UpcomingList = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { offset, handleRefresh, handleReset } = usePagination(20, 2);
-  const { data: upcomingList, isNext, isLoading } = useSelector((state) => state.upcomingList);
+  const [isRegionOpen, dropRegionRef, handleRegionClick] = useDropdown();
+  const [isDayOpen, dropDayRef, handleDayClick] = useDropdown();
+
+  const { data: upcomingList, isNext, isLoading } = useAppSelector((state) => state.upcomingList);
   const {
     category: categoryData,
     day: dayData,
     region: regionData,
     soldOut,
-  } = useSelector((state) => state.select);
+  } = useAppSelector((state) => state.select);
 
   useEffect(() => {
     handleReset();
@@ -75,8 +79,22 @@ const UpcomingList = () => {
       </S.SoldOutContainer>
 
       <S.DropdownContainer>
-        <Dropdown name="지역" arr={regionArr} selectedData={regionData} />
-        <Dropdown name="요일" arr={dayArr} selectedData={dayData} />
+        <Dropdown
+          name="지역"
+          arr={regionArr}
+          selectedData={regionData}
+          dropdown={{
+            isOpen: isRegionOpen,
+            dropRef: dropRegionRef,
+            handleClick: handleRegionClick,
+          }}
+        />
+        <Dropdown
+          name="요일"
+          arr={dayArr}
+          selectedData={dayData}
+          dropdown={{ isOpen: isDayOpen, dropRef: dropDayRef, handleClick: handleDayClick }}
+        />
       </S.DropdownContainer>
 
       <S.CardContainer>
